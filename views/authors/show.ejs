@@ -1,0 +1,15 @@
+<h2>
+    <%= author.name %>
+</h2>
+<a href="authors/<%= author.id %>/edit">Edit</a>
+<form method="POST" action="/authors/<%= author.id %>?_method=DELETE">
+    <button type="submit">Delete</button>
+</form>
+
+<% if(booksByAuthor.length> 0) { %>
+    <h2>Books By Author</h2>
+    <% booksByAuthor.forEach(book=>{ %>
+        <!-- Here we are calling the virtual function defined in the models of book -->
+        <img height="150" width="100" src="<%= book.coverImagePath %>">
+        <% }) %>
+            <% } %>
