@@ -1,0 +1,29 @@
+<h2>Search Book</h2>
+<form action="/books" method="GET">
+    <div>
+        <label>Title</label>
+        <input type="name" name="title" value="<%= searchOptions.title %>">
+    </div>
+
+    <div>
+        <label>Published After
+        </label>
+        <input type="date" name="publishedAfter" value="<%= searchOptions.publishedAfter %>">
+    </div>
+
+    <div>
+        <label>Published Before
+        </label>
+        <input type="date" name="publishedBefore" value="<%= searchOptions.publishedBefore %>">
+    </div>
+
+    <button type="submit">Search</button>
+</form>
+<br>
+<div>
+<% books.forEach(book=>{ %>
+    <!-- Here we are calling the virtual function defined in the models of book -->
+   <img height="150" width="100" src="<%= book.coverImagePath %>" >  
+    <% }) %>
+
+</div>
