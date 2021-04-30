@@ -79,8 +79,7 @@ router.post('/', upload.single('cover'), async (req, res) => {   // so here we a
     })
     try {
         const newBook = await book.save()
-        // res.redirect(`books/${newBook.id}`)
-        res.redirect('books')
+        res.redirect(`books/${newBook.id}`)
 
     } catch (error) {
         if (book.coverImageName != null) {
@@ -93,6 +92,71 @@ router.post('/', upload.single('cover'), async (req, res) => {   // so here we a
             errorMessage: 'Error Creating Book'
         })
     }
+})
+
+router.get('/:id', async (req, res) => {
+    try {
+        const book = await Book.findById(req.params.id).populate('author')   // Here populate will add all the properties that exists in the author model
+        res.render('books/show', { book: book })
+    } catch (error) {
+        res.redirect('/')
+    }
+})
+
+router.get('/:id/edit', async (req, res) => {
+    try {
+        const book = await Book.findById(req.params.id)
+        const authors = await Author.find({})
+        res.render('books/edit', { book: book, authors: authors })
+    } catch (error) {
+        res.redirect('/')
+    }
+})
+
+// Updating the book route
+
+
+router.put('/:id', async (req, res) => {   // so here we are telling the multer that we will upload the single file with the name inside in the "cover"
+  
+    let book
+    try {
+        book = await Book.findById(req.params.id)
+        book.title = req.body.title
+        book.author = req.body.author
+        book.publishDate = new Date(req.body.publishDate)
+        book.pageCount = req.body.pageCount
+        book.description = req.body.description
+       
+        await book.save()
+        res.redirect(`books/${book.id}`)
+
+    } catch (error) {
+        console.log(error)
+        const authors = await Author.find({})
+        res.render(`books/edit`, {
+            authors: authors,
+            book: book,
+            errorMessage: 'Error Editing Book'
+        })
+    }
+})
+
+router.delete('/:id', async(req, res) => {
+     let book
+     try {
+         book = await Book.findById(req.params.id)
+         await book.remove()
+         res.redirect('/books')
+     } catch (error) {
+        if(book != null) {
+            res.redirect('/books/show', {
+                book: book, 
+                errorMessage: 'Failed to delete the book'
+            })
+        } else {
+            res.redirect('/')
+        }
+     }
 })
 
 module.exports = router

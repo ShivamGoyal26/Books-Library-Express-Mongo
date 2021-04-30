@@ -21,9 +21,11 @@
 </form>
 <br>
 <div>
-<% books.forEach(book=>{ %>
-    <!-- Here we are calling the virtual function defined in the models of book -->
-   <img height="150" width="100" src="<%= book.coverImagePath %>" >  
-    <% }) %>
+    <% books.forEach(book=>{ %>
+        <!-- Here we are calling the virtual function defined in the models of book -->
+        <a href="/books/<%= book.id %>">
+            <img height="150" width="100" src="<%= book.coverImagePath %>">
+        </a>
+        <% }) %>
 
 </div>
